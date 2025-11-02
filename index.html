@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Começo de uma jornada romântica</title>
+    <link rel="shortcut icon" href="img/heart_icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
+        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        h1 {
+            font-family: "Mea Culpa", serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #fff;
+            font-size: 5em;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.4em;
+            color: #fff;
+            max-width: 600px;
+            padding: 0 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4a6e, #ff007f);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            background: linear-gradient(90deg, #ff006f, #ff005f);
+            transform: scale(1.1);
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 0, 100, 0.7);
+            font-size: 1.5em;
+            animation: fall 4s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh) scale(1); opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+        }
+
+        .button-container {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h1>Desafio [sedencia aqui]</h1>
+    <p>Bem-vindo ao desafio especial para comemorar nosso amor! 💖</p>
+    <p>Clique no botão abaixo para iniciar sua jornada romântica!</p>
+    <div class="button-container">
+        <button id="startButton">Começar</button>
+    </div>
+
+    <script>
+        function criarCoraçao() {
+            for (let i = 0; i < 3; i++) { // Criar múltiplos corações por intervalo
+                const heart = document.createElement("div");
+                heart.innerHTML = "❤️";
+                heart.classList.add("heart");
+                document.body.appendChild(heart);
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.top = "-12vh";
+                heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+                setTimeout(() => heart.remove(), 5000);
+            }
+        }
+        setInterval(criarCoraçao, 80); // Diminuindo o intervalo para mais corações
+
+        document.getElementById("startButton").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.body.style.opacity = "0";
+            setTimeout(() => {
+                window.location.href = "d1-start.html";
+            }, 500);
+        });
+    </script>
+</body>
+</html>

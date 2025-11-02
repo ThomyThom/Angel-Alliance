@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Nº10</title>
+    <link rel="shortcut icon" href="img/heart_icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mea+Culpa&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Micro+5+Charted&family=Pixelify+Sans:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        emailjs.init("G8yQrJsHnxmhrEoGu"); // Substitua pelo seu User ID do EmailJS
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playwrite+US+Trad:wght@100..400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(54, 54, 54, 0.5) transparent;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(54, 54, 54, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-ms-scrollbar {
+            display: none; /* Esconde completamente */
+        }
+
+        body { 
+            -ms-overflow-style: none;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+
+        .container {
+            position: relative;
+            max-width: 90%; /* Ajuste para ocupar mais espaço horizontal */
+            margin: 0 auto;
+            padding: 50px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: row; /* Coloca os itens em linha */
+            justify-content: space-around; /* Espaço uniforme entre as áreas */
+            align-items: flex-start; /* Alinha os itens ao topo */
+            gap: 30px; /* Espaçamento maior entre as duas áreas */
+        }
+
+        h1 {
+            color: rgb(255, 29, 78);
+            font-size: 5em;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-family: "Great Vibes", cursive;
+            font-weight: 300;
+        }
+
+        h2 {
+            color: rgb(87, 0, 250);
+            font-size: 2em;
+            font-family: "Great Vibes", cursive;
+            font-weight: 300;
+        }
+
+        #main {
+            user-select: none;
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1.5em;
+            line-height: 2.5;
+            font-family: "Great Vibes", cursive;
+            font-weight: 300;
+        }
+        
+        #obs {
+            display: block;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 300;
+            font-family: 'Open Sans', sans-serif;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            overflow: hidden;
+            transition: opacity 0.85s ease-in-out, max-height 0.8s ease-in-out;
+        }
+
+        textarea {
+            border-radius: 10px;
+            margin-top: 25px;
+            padding: 10px;
+            font-size: 1.1em;
+            width: 100%;
+            max-width: 500px;
+            min-height: 50px;
+            max-height: 200px;
+            place-content: center;
+            text-align: center;
+            resize: none; /* Impede redimensionamento manual */
+            overflow-y: hidden; /* Esconde a barra de rolagem vertical */
+        }        
+
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4a6e, #ff007f);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #ff007f, #ff4a6e);
+            transform: scale(1.1);
+        }
+
+        input { 
+            border-radius: 10px;
+            margin-top: 25px; 
+            padding: 10px; 
+            font-size: 1.1em;
+            width: 250px;
+            text-align: center;
+        }
+        
+        #timer { 
+            color: red; 
+            font-size: 1.2em; 
+            display: none; 
+            margin-top: 20px;
+        }
+
+        #mostrarObs {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4a6e, #ff007f);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        #mostrarObs:hover {
+            background: linear-gradient(90deg, #ff007f, #ff4a6e);
+            transform: scale(1.1);
+        }
+        
+        #countdown {
+            position: fixed; /* Alterado de sticky para fixed */
+            bottom: 10px;
+            left: 10px; /* Alterado de right: 99% para left: 10px */
+            font-size: 1.2em;
+            color: #fff;
+            background: rgba(255, 0, 179, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+        }
+
+        .frase-bloco {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: grab;
+            font-size: 1.1em;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            width: 100%; /* Largura total do contêiner pai */
+            max-width: none; /* Remove limite de largura */
+            margin-bottom: 15px; /* Espaço entre os blocos */
+            padding: 15px 20px; /* Adiciona mais espaço interno */
+            line-height: 1.5;
+        }
+
+        #frases-embaralhadas {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espaçamento maior entre os blocos */
+            width: 48%; /* Ajuste para ocupar mais espaço */
+            max-width: 500px; /* Largura máxima maior */
+            align-items: stretch; /* Estica os blocos para preencher a largura */
+        }
+
+        #area-resposta {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espaçamento maior entre os blocos */
+            width: 48%; /* Ajuste para ocupar mais espaço */
+            max-width: 500px; /* Largura máxima maior */
+            margin-top: 0; /* Garante que não tenha margem superior extra */
+            padding: 15px;
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+        }
+
+        #verificar-ordem {
+            margin-top: 0; /* Remove margem superior */
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4a6e, #ff007f);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+            position: sticky; /* Fixa o botão no topo do container */
+            top: 0; /* Sempre visível no topo */
+            z-index: 10; /* Garante que fique acima de outros elementos */
+            width: auto; /* Ajusta a largura para o conteúdo */
+            align-self: center; /* Centraliza o botão no container */
+            display: block; /* Garante que o botão seja sempre exibido */
+        }
+
+        #verificar-ordem:hover {
+            background: linear-gradient(90deg, #ff007f, #ff4a6e);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Vamos juntar tudo?</h1>
+
+    <h2>Será que você vai gostar? <br> Ou será que você vai amar?</h2>
+    
+    <p id="main">
+        Arraste os blocos de texto para a área abaixo na ordem correta: 2 6 5 4 3 9 7 8
+    </p>
+    
+    <p id="obs">  <!--Dica-->
+        Se a resposta do desafio 01 for: <br>
+        <b>Arranhei de leve a pintura da Mercedes ao dar ré na semana passada.</b> <br>
+        E a do desafio 02 for: <br>
+        <b>Meu coração bateu mais forte quando você me beijou.</b> <br>
+        E a ordem for: <br>
+        <b>2 1</b> <br>
+        Então, a resposta para este desafio é: <br>
+        <b>Meu coração bateu mais forte quando você me beijou. Arranhei de leve a pintura da Mercedes ao dar ré na semana passada.</b> <br>
+        Não se esqueça do espaço entre as frases de cada desafio e da pontuação. <br>
+        Boa sorte!
+    </p>
+    <div class="container">
+        <div id="frases-embaralhadas"></div>
+        <button id="verificar-ordem">Verificar Ordem</button>
+        <div id="area-resposta"></div>
+    </div>
+    <p id="mensagem"></p>
+    <p id="timer"></p>
+    <div id="end"></div>
+    
+    <button id="mostrarObs">Obs</button>
+
+    <div id="tempo-restante" style="position: fixed; bottom: 50px; left: 10px; font-size: 1.2em; color: #fff; background: rgba(255, 0, 179, 0); padding: 10px 15px; border-radius: 5px; font-family: Arial, sans-serif; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); z-index: 1000;">
+        Tempo Restante:
+    </div>
+    <div id="countdown"></div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.style.opacity = "0"; // Garante que começa invisível
+            let opacidade = 0;
+    
+            let fadeIn = setInterval(() => {
+                if (opacidade < 1) {
+                    opacidade += 0.05;
+                    document.body.style.opacity = opacidade.toFixed(1); // Ajusta com 1 casa decimal
+                } else {
+                    clearInterval(fadeIn); // Para o loop quando atingir 1
+                }
+            }, 30); // Atualiza a cada 50ms
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("resposta");
+        
+            function ajustarAltura() {
+                textarea.style.height = "auto"; // Redefine a altura
+                textarea.style.height = textarea.scrollHeight + "px"; // Ajusta para o conteúdo
+            }
+        
+            textarea.addEventListener("input", ajustarAltura);
+            ajustarAltura();
+        });        
+
+        const frasesCorretas = [
+            "Era dia 23 de maio quando o mundo parou e só existia você.",
+            "Entre os corredores da escola, a agitação da manhã se apagou, e tudo o que restou foi o calor do seu olhar e a intensidade do seu beijo.",
+            "Lembra? Aquele instante, entre a correria da manhã e a expectativa pela aula, se transformou em um universo só nosso.",
+            "Seus lábios macios tocaram os meus, e em uma fração de segundo, o mundo ao redor simplesmente desapareceu.",
+            "Foi como se o tempo tivesse parado.",
+            "Aquele beijo carregava a promessa de um novo dia, a esperança de um futuro juntos e a certeza de que nossos sentimentos eram intensos e verdadeiros.",
+            "A cada segundo que passa, aquele beijo ecoa em meu coração. É como se um raio de sol tivesse iluminado meu dia, aquecendo minha alma e me enchendo de alegria.",
+            "Agradeço por esse momento mágico, por ter você ao meu lado e por cada beijo que ainda vamos trocar. Eu a amo, minha princesa."
+        ];
+
+        let frasesEmbaralhadas = [];
+        let elementoArrastado = null;
+        const tempoBloqueio = 1 * 60 * 1000; //1 minuto em milissegundos
+        let ipUsuario;
+
+        async function obterIP() {
+            try {
+                const response = await fetch('https://api64.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error("Erro ao obter IP:", error);
+                return null;
+            }
+        }
+
+        async function verificarBloqueio() {
+            ipUsuario = await obterIP(); // Obtem o IP do usuário
+            const bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
+            const tempoAtual = Date.now();
+
+            if (bloqueio[ipUsuario] && tempoAtual < bloqueio[ipUsuario]) {
+                iniciarContador(bloqueio[ipUsuario]); // Inicia o contador de bloqueio
+                return true; // Indica que o usuário está bloqueado
+            }
+
+            return false; // Indica que o usuário não está bloqueado
+        }
+
+        function embaralharFrases() {
+            const frases = [...frasesCorretas];
+            for (let i = frases.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [frases[i], frases[j]] = [frases[j], frases[i]];
+            }
+            frasesEmbaralhadas = frases.map((frase, index) => ({ id: index + 1, texto: frase }));
+        }
+
+        function criarBlocosFrases() {
+            const containerEmbaralhadas = document.getElementById("frases-embaralhadas");
+            frasesEmbaralhadas.forEach(fraseObj => {
+                const bloco = document.createElement("div");
+                bloco.classList.add("frase-bloco");
+                bloco.id = `frase-${fraseObj.id}`;
+                bloco.draggable = true;
+                bloco.innerText = fraseObj.texto;
+
+                bloco.addEventListener("dragstart", iniciarArrasto);
+                bloco.addEventListener("dragend", finalizarArrasto);
+
+                containerEmbaralhadas.appendChild(bloco);
+            });
+        }
+
+        function iniciarArrasto(event) {
+            elementoArrastado = event.target;
+            event.dataTransfer.setData("text/plain", event.target.id);
+            event.target.style.opacity = "0.5"; // Reduz a opacidade para feedback visual
+        }
+
+        function finalizarArrasto(event) {
+            event.target.style.opacity = "1"; // Restaura a opacidade
+        }
+
+        function permitirDrop(event) {
+            event.preventDefault();
+            const areaResposta = document.getElementById("area-resposta");
+            areaResposta.style.borderColor = "#ff007f"; // Destaca a área de drop
+        }
+
+        function removerDrop(event) {
+            event.preventDefault();
+            const areaResposta = document.getElementById("area-resposta");
+            areaResposta.style.borderColor = "#aaa"; // Restaura a borda padrão
+        }
+
+        function receberDrop(event) {
+            event.preventDefault();
+            const id = event.dataTransfer.getData("text/plain");
+            const elemento = document.getElementById(id);
+            const areaResposta = document.getElementById("area-resposta");
+
+            if (event.target === areaResposta || event.target.parentElement === areaResposta) {
+                areaResposta.appendChild(elemento);
+            } else {
+                const containerEmbaralhadas = document.getElementById("frases-embaralhadas");
+                containerEmbaralhadas.appendChild(elemento);
+            }
+
+            elementoArrastado = null;
+            areaResposta.style.borderColor = "#aaa"; // Restaura a borda padrão
+        }
+
+        function habilitarReordenacao() {
+            const areaResposta = document.getElementById("area-resposta");
+            areaResposta.addEventListener("dragover", permitirDrop);
+            areaResposta.addEventListener("drop", receberDrop);
+            areaResposta.addEventListener("dragleave", removerDrop);
+
+            const containerEmbaralhadas = document.getElementById("frases-embaralhadas");
+            containerEmbaralhadas.addEventListener("dragover", permitirDrop);
+            containerEmbaralhadas.addEventListener("drop", receberDrop);
+            containerEmbaralhadas.addEventListener("dragleave", removerDrop);
+        }
+
+        async function verificarOrdem() {
+            if (await verificarBloqueio()) return;
+
+            const areaResposta = document.getElementById("area-resposta");
+            const frasesSelecionadas = Array.from(areaResposta.children).map(bloco => bloco.innerText);
+
+            if (frasesSelecionadas.length !== frasesCorretas.length) {
+                document.getElementById("mensagem").style.display = "block";
+                document.getElementById("mensagem").innerText = "Ordene todas as frases!";
+                setTimeout(() => {
+                    document.getElementById("mensagem").style.display = "none";
+                }, 2000);
+                return;
+            }
+
+            const respostaUsuario = frasesSelecionadas.join(" ");
+            const respostaCorretaCompleta = frasesCorretas.join(" ");
+
+            if (respostaUsuario.toLowerCase() === respostaCorretaCompleta.toLowerCase()) {
+                document.getElementById("mensagem").style.display = "block";
+                document.getElementById("mensagem").innerText = "Resposta correta! Você será encaminhada para a próxima fase!";
+                window.location.href = "#end";
+                enviarEmail();
+
+                setTimeout(function() {
+                    document.body.style.opacity = "0";
+                    setTimeout(function() {
+                        window.location.href = "end-vida.html";
+                    }, 500);
+                }, 3500);
+            } else {
+                bloquearUsuario(); // Ativa o bloqueio imediatamente
+                document.getElementById("mensagem").style.display = "block";
+                document.getElementById("mensagem").innerText = "Resposta incorreta! Você não poderá responder por 1 minuto.";
+                setTimeout(function() {
+                    window.location.href = "#timer";
+                }, 10);
+            }
+        }
+
+        function bloquearUsuario() {
+            const desbloqueio = Date.now() + tempoBloqueio; // Calcula o tempo de desbloqueio
+            let bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
+            bloqueio[ipUsuario] = desbloqueio; // Associa o IP ao tempo de desbloqueio
+            localStorage.setItem('bloqueiof10', JSON.stringify(bloqueio)); // Salva no localStorage
+            iniciarContador(desbloqueio); // Atualiza o contador
+
+            // Desabilita interações durante o bloqueio
+            const areaResposta = document.getElementById("area-resposta");
+            const frasesEmbaralhadasDiv = document.getElementById("frases-embaralhadas");
+            const verificarBotao = document.getElementById("verificar-ordem");
+
+            Array.from(areaResposta.children).forEach(bloco => {
+                bloco.draggable = false;
+                bloco.style.cursor = 'default';
+            });
+            Array.from(frasesEmbaralhadasDiv.children).forEach(bloco => {
+                bloco.draggable = false;
+                bloco.style.cursor = 'default';
+            });
+            verificarBotao.disabled = true;
+        }
+        
+        // Função para enviar o e-mail
+        function enviarEmail() {
+            emailjs.send("personal_gmail", "template_conc_fase_10") //alterar service e template pra cada necessidade
+                .then(function(response) {
+                    console.log("E-mail enviado com sucesso!", response.status, response.text);
+                }, function(error) {
+                    console.error("Erro ao enviar o e-mail:", error);
+                });
+        }
+
+        function iniciarContador(desbloqueio) {
+            const timerElement = document.getElementById("timer");
+            const areaResposta = document.getElementById("area-resposta");
+            const frasesEmbaralhadasDiv = document.getElementById("frases-embaralhadas");
+            const verificarBotao = document.getElementById("verificar-ordem");
+
+            timerElement.style.display = "block";
+
+            function atualizarContador() {
+                const tempoRestante = desbloqueio - Date.now();
+                if (tempoRestante <= 0) {
+                    timerElement.innerText = "Você pode tentar novamente.";
+                    Array.from(areaResposta.children).forEach(bloco => {
+                        bloco.draggable = true;
+                        bloco.style.cursor = 'grab';
+                    });
+                    Array.from(frasesEmbaralhadasDiv.children).forEach(bloco => {
+                        bloco.draggable = true;
+                        bloco.style.cursor = 'grab';
+                    });
+                    verificarBotao.disabled = false;
+                    timerElement.style.display = "none";
+                    document.getElementById("mensagem").style.display = "none";
+
+                    // Remove o bloqueio do localStorage
+                    let bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
+                    delete bloqueio[ipUsuario];
+                    localStorage.setItem('bloqueiof10', JSON.stringify(bloqueio));
+                } else {
+                    const minutos = Math.floor(tempoRestante / 60000);
+                    const segundos = Math.floor((tempoRestante % 60000) / 1000);
+                    timerElement.innerText = `Tente novamente em ${minutos}m ${segundos}s`;
+                    setTimeout(atualizarContador, 1000);
+                }
+            }
+            atualizarContador();
+        }
+
+        window.onload = function() {
+            verificarBloqueio().then(() => {
+                embaralharFrases();
+                criarBlocosFrases();
+                habilitarReordenacao();
+
+                const verificarOrdemButton = document.getElementById("verificar-ordem");
+                verificarOrdemButton.addEventListener("click", verificarOrdem);
+            });
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const obs = document.getElementById("obs");
+            const botao = document.getElementById("mostrarObs");
+        
+            botao.addEventListener("click", function () {
+                if (obs.style.opacity === "0" || obs.style.opacity === "") {
+                    obs.style.maxHeight = "500px"; // Ajuste conforme necessário
+                    obs.style.opacity = "1";
+                } else {
+                    obs.style.maxHeight = "0";
+                    obs.style.opacity = "0";
+                }
+            });
+        });
+        
+        function atualizarContagemRegressiva() {
+            const destino = new Date("2025-05-22T23:59:00");
+            const agora = new Date();
+            const diferenca = destino - agora;
+
+            if (diferenca <= 0) {
+                document.getElementById("countdown").innerText = "Chegou o grande momento!";
+                clearInterval(intervaloContagem);
+                return;
+            }
+
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerText = 
+                `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+        }
+
+        const intervaloContagem = setInterval(atualizarContagemRegressiva, 1000);
+        atualizarContagemRegressiva();
+    </script>
+</body>
+</html>

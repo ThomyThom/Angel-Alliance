@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parabéns Minha Neném!!</title>
+    <link rel="shortcut icon" href="img/heart_icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
+        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: "Mea Culpa", serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #fff;
+            font-size: 5em;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.4em;
+            color: #fff;
+            max-width: 600px;
+            padding: 0 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 3em;
+            animation: rise 6s linear;
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 20px;
+            background: linear-gradient(to top, yellow, red);
+            animation: shoot 2s ease-out;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+        }
+
+        .explosion {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, red, yellow, transparent);
+            border-radius: 50%;
+            animation: explode 1s ease-out;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: particleMove 1.5s ease-out;
+            box-shadow: 0 0 5px currentColor;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(1); opacity: 1; }
+            50% { opacity: 1; }
+            75% { opacity: 0.9; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes shoot {
+            0% { transform: translateY(100vh); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(var(--targetHeight)); opacity: 0; }
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(5); opacity: 0; }
+        }
+
+        @keyframes particleMove {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Parabéns Minha Neném!!</h1>
+    <p>Depois de muito trabalho você conseguiu minha princesa! 💖</p>
+    <p>Espero que goste do seu presente, e que tenha se divertido com o jogo! 😊</p>
+
+
+    <script>
+        let intervaloBalões = setInterval(criarBalao, 300);
+        criarFogo();
+
+        function criarBalao() {
+            for (let i = 0; i < 10; i++) {
+                const balloon = document.createElement("div");
+                const emojis = ["🎈", "🎉", "💖", "🎊", "💗"];
+                balloon.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                balloon.classList.add("balloon");
+                document.body.appendChild(balloon);
+                balloon.style.left = Math.random() * 100 + "vw";
+                balloon.style.bottom = "-10vh";
+                balloon.style.animationDuration = Math.random() * 3 + 4 + "s";
+                setTimeout(() => balloon.remove(), 7000);
+            }
+        }
+
+        function criarFogo() {
+            for (let i = 0; i < 3; i++) { // Limita a criação a no máximo 3 fogos
+                setTimeout(() => {
+                    const firework = document.createElement("div");
+                    firework.classList.add("firework");
+                    document.body.appendChild(firework);
+                    firework.style.left = Math.random() * 100 + "vw";
+                    firework.style.bottom = "0";
+                    const targetHeight = Math.random() * 50 + 50 + "vh";
+                    firework.style.setProperty('--targetHeight', `-${targetHeight}`);
+                    firework.style.animationDuration = Math.random() * 1 + 1 + "s";
+
+                    firework.addEventListener('animationend', () => {
+                        const explosion = document.createElement("div");
+                        explosion.classList.add("explosion");
+                        explosion.style.left = firework.style.left;
+                        explosion.style.bottom = targetHeight;
+                        explosion.style.color = getRandomColor();
+                        document.body.appendChild(explosion);
+
+                        const heartCoordinates = generateHeartCoordinates(20, 20);
+
+                        heartCoordinates.forEach(coord => {
+                            const particle = document.createElement("div");
+                            particle.classList.add("particle");
+                            particle.style.left = `calc(${explosion.style.left} + 7px)`; // Ajuste fino para centralizar
+                            particle.style.bottom = explosion.style.bottom;
+                            particle.style.color = explosion.style.color;
+                            particle.style.setProperty('--x', coord.x + 'px');
+                            particle.style.setProperty('--y', coord.y + 'px');
+                            document.body.appendChild(particle);
+                            setTimeout(() => particle.remove(), 1500);
+                        });
+
+                        setTimeout(() => explosion.remove(), 1000);
+                        firework.remove();
+                    });
+                }, i * 200); // Pequeno atraso para criar o efeito de simultaneidade
+            }
+            setTimeout(criarFogo, 3000); // Chama novamente após 3 segundos
+        }
+
+        function generateHeartCoordinates(width, height) {
+            const coords = [];
+            for (let angle = 0; angle < 360; angle += 10) {
+                const rad = angle * (Math.PI / 180);
+                const x = width * 16 * Math.sin(rad) ** 3;
+                const y = -height * (13 * Math.cos(rad) - 5 * Math.cos(2 * rad) - 2 * Math.cos(3 * rad) - Math.cos(4 * rad));
+                coords.push({ x, y });
+            }
+            return coords;
+        }
+
+        function getRandomColor() {
+            const weightedColors = [
+                { color: "red", weight: 60 },
+                { color: "purple", weight: 12 },
+                { color: "yellow", weight: 8 },
+                { color: "blue", weight: 7 },
+                { color: "green", weight: 6 },
+                { color: "lightgreen", weight: 4 },
+                { color: "cyan", weight: 3 }
+            ];
+
+            const totalWeight = weightedColors.reduce((sum, item) => sum + item.weight, 0);
+            const random = Math.random() * totalWeight;
+
+            let cumulativeWeight = 0;
+            for (const item of weightedColors) {
+                cumulativeWeight += item.weight;
+                if (random <= cumulativeWeight) {
+                    return item.color;
+                }
+            }
+        }
+
+        setTimeout(() => {
+            clearInterval(intervaloBalões);
+        }, 3000); // Para a criação de balões após 3 segundos
+    </script>
+</body>
+</html>
