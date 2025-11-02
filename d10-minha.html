@@ -506,7 +506,7 @@
         
         // Função para enviar o e-mail
         function enviarEmail() {
-            emailjs.send("personal_gmail", "template_conc_fase_10") //alterar service e template pra cada necessidade
+            emailjs.send("personal_gmail", "template_Concluded") //alterar service e template pra cada necessidade
                 .then(function(response) {
                     console.log("E-mail enviado com sucesso!", response.status, response.text);
                 }, function(error) {
