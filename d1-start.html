@@ -413,9 +413,9 @@
 
         function bloquearUsuario() {
             const desbloqueio = Date.now() + tempoBloqueio;
-            let bloqueio = JSON.parse(localStorage.getItem('bloqueiof04')) || {};
+            let bloqueio = JSON.parse(localStorage.getItem('bloqueiof01')) || {};
             bloqueio[ipUsuario] = desbloqueio;
-            localStorage.setItem('bloqueiof04', JSON.stringify(bloqueio));
+            localStorage.setItem('bloqueiof01', JSON.stringify(bloqueio));
             iniciarContador(desbloqueio);
         }
 
@@ -461,7 +461,7 @@
         });
 
         function atualizarContagemRegressiva() {
-            const destino = new Date("2025-11-15T23:59:00");
+            const destino = new Date("2026-11-15T23:59:00");
             const agora = new Date();
             const diferenca = destino - agora;
 
