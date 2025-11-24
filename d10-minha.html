@@ -9,10 +9,13 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mea+Culpa&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Micro+5+Charted&family=Pixelify+Sans:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        emailjs.init("G8yQrJsHnxmhrEoGu"); // Substitua pelo seu User ID do EmailJS
+        emailjs.init("G8yQrJsHnxmhrEoGu"); // User ID do EmailJS
     </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
@@ -28,18 +31,9 @@
             scrollbar-color: rgba(54, 54, 54, 0.5) transparent;
         }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(54, 54, 54, 0.5);
-            border-radius: 10px;
-        }
-
-        ::-ms-scrollbar {
-            display: none; /* Esconde completamente */
-        }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(54, 54, 54, 0.5); border-radius: 10px; }
+        ::-ms-scrollbar { display: none; }
 
         body { 
             -ms-overflow-style: none;
@@ -60,24 +54,25 @@
 
         .container {
             position: relative;
-            max-width: 90%; /* Ajuste para ocupar mais espaço horizontal */
+            max-width: 95%;
             margin: 0 auto;
-            padding: 50px;
+            padding: 30px;
             background-color: rgba(255, 255, 255, 0.4);
             border-radius: 10px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
             display: flex;
-            flex-direction: row; /* Coloca os itens em linha */
-            justify-content: space-around; /* Espaço uniforme entre as áreas */
-            align-items: flex-start; /* Alinha os itens ao topo */
-            gap: 30px; /* Espaçamento maior entre as duas áreas */
+            flex-direction: row; /* Força linha horizontal */
+            justify-content: space-between; /* Espalha os itens */
+            align-items: flex-start; /* Alinha no topo */
+            gap: 20px;
+            flex-wrap: nowrap; /* IMPEDE que a caixa caia para baixo no desktop */
         }
 
         h1 {
             color: rgb(255, 29, 78);
-            font-size: 5em;
-            margin-top: 50px;
-            margin-bottom: 30px;
+            font-size: 4em; /* Levemente reduzido para mobile */
+            margin-top: 30px;
+            margin-bottom: 20px;
             font-family: "Great Vibes", cursive;
             font-weight: 300;
         }
@@ -91,10 +86,10 @@
 
         #main {
             user-select: none;
-            margin-top: 25px;
+            margin-top: 15px;
             text-align: center;
             font-size: 1.5em;
-            line-height: 2.5;
+            line-height: 1.5;
             font-family: "Great Vibes", cursive;
             font-weight: 300;
         }
@@ -108,24 +103,13 @@
             opacity: 0;
             max-height: 0;
             overflow: hidden;
-            overflow: hidden;
             transition: opacity 0.85s ease-in-out, max-height 0.8s ease-in-out;
-        }
-
-        textarea {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0 10px;
             border-radius: 10px;
-            margin-top: 25px;
-            padding: 10px;
-            font-size: 1.1em;
-            width: 100%;
-            max-width: 500px;
-            min-height: 50px;
-            max-height: 200px;
-            place-content: center;
-            text-align: center;
-            resize: none; /* Impede redimensionamento manual */
-            overflow-y: hidden; /* Esconde a barra de rolagem vertical */
-        }        
+            margin: 10px auto;
+            max-width: 600px;
+        }
 
         button {
             margin-top: 20px;
@@ -148,116 +132,145 @@
             transform: scale(1.1);
         }
 
-        input { 
-            border-radius: 10px;
-            margin-top: 25px; 
-            padding: 10px; 
-            font-size: 1.1em;
-            width: 250px;
-            text-align: center;
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
-        
+
         #timer { 
             color: red; 
             font-size: 1.2em; 
             display: none; 
             margin-top: 20px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.8);
+            padding: 10px;
+            border-radius: 5px;
         }
 
         #mostrarObs {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 15px 20px;
+            padding: 10px 15px;
             font-size: 1em;
-            font-weight: bold;
-            background: linear-gradient(90deg, #ff4a6e, #ff007f);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 50px;
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease-in-out;
-        }
-        
-        #mostrarObs:hover {
-            background: linear-gradient(90deg, #ff007f, #ff4a6e);
-            transform: scale(1.1);
+            z-index: 1001;
         }
         
         #countdown {
-            position: fixed; /* Alterado de sticky para fixed */
+            position: fixed;
             bottom: 10px;
-            left: 10px; /* Alterado de right: 99% para left: 10px */
-            font-size: 1.2em;
+            left: 10px;
+            font-size: 1em;
             color: #fff;
             background: rgba(255, 0, 179, 0.5);
             padding: 10px 15px;
             border-radius: 5px;
             font-family: Arial, sans-serif;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-            z-index: 1000; /* Garante que fique acima de outros elementos */
+            z-index: 1000;
         }
 
+        /* Estilos dos Blocos */
         .frase-bloco {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 1px solid #ff4a6e;
             border-radius: 8px;
             cursor: grab;
-            font-size: 1.1em;
+            font-size: 1em;
             text-align: center;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-            width: 100%; /* Largura total do contêiner pai */
-            max-width: none; /* Remove limite de largura */
-            margin-bottom: 15px; /* Espaço entre os blocos */
-            padding: 15px 20px; /* Adiciona mais espaço interno */
-            line-height: 1.5;
-        }
-
-        #frases-embaralhadas {
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espaçamento maior entre os blocos */
-            width: 48%; /* Ajuste para ocupar mais espaço */
-            max-width: 500px; /* Largura máxima maior */
-            align-items: stretch; /* Estica os blocos para preencher a largura */
-        }
-
-        #area-resposta {
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espaçamento maior entre os blocos */
-            width: 48%; /* Ajuste para ocupar mais espaço */
-            max-width: 500px; /* Largura máxima maior */
-            margin-top: 0; /* Garante que não tenha margem superior extra */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-bottom: 10px;
             padding: 15px;
-            border: 2px dashed #aaa;
+            line-height: 1.4;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .frase-bloco:active {
+            cursor: grabbing;
+        }
+
+        /* Estilo visual durante o arraste (SortableJS) */
+        .sortable-ghost {
+            opacity: 0.4;
+            background-color: #ffe0e9;
+            border: 2px dashed #ff007f;
+        }
+
+        .sortable-drag {
+            cursor: grabbing;
+            opacity: 1;
+            background-color: #fff;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        #frases-embaralhadas, #area-resposta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1; /* Ocupa o espaço disponível igualmente */
+            width: auto; /* Remove a largura fixa */
+            min-width: 300px; /* Garante um tamanho mínimo */
+            min-height: 400px;
+            padding: 15px;
             border-radius: 10px;
         }
 
-        #verificar-ordem {
-            margin-top: 0; /* Remove margem superior */
-            padding: 15px 30px;
-            font-size: 1.3em;
-            font-weight: bold;
-            background: linear-gradient(90deg, #ff4a6e, #ff007f);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 20px;
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease-in-out;
-            position: sticky; /* Fixa o botão no topo do container */
-            top: 0; /* Sempre visível no topo */
-            z-index: 10; /* Garante que fique acima de outros elementos */
-            width: auto; /* Ajusta a largura para o conteúdo */
-            align-self: center; /* Centraliza o botão no container */
-            display: block; /* Garante que o botão seja sempre exibido */
+        #frases-embaralhadas {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid transparent;
         }
 
-        #verificar-ordem:hover {
-            background: linear-gradient(90deg, #ff007f, #ff4a6e);
-            transform: scale(1.1);
+        #area-resposta {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 2px dashed #ff007f;
+        }
+
+        /* O botão fica centralizado verticalmente ou no meio */
+        #verificar-ordem {
+            align-self: center; 
+            margin: 0 10px;
+            flex-shrink: 0; /* Impede o botão de ser esmagado */
+        }
+
+        /* Responsividade para CELULAR (Aqui sim fica um embaixo do outro) */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column; /* Muda para coluna */
+                align-items: center;
+                flex-wrap: wrap; /* Permite quebrar linha no celular */
+            }
+            
+            #frases-embaralhadas, #area-resposta {
+                width: 100%; /* Ocupa tudo no celular */
+                max-width: 100%;
+                min-height: 200px;
+            }
+
+            #verificar-ordem {
+                position: fixed;
+                bottom: 80px; 
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                width: 80%;
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            }
+        }
+
+        #mensagem {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff;
+            background: #ff007f;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -267,11 +280,11 @@
     <h2>Será que você vai gostar? <br> Ou será que você vai amar?</h2>
     
     <p id="main">
-        Arraste os blocos de texto para a área abaixo na ordem correta: 2 6 5 4 3 9 7 8
+        Arraste os blocos de texto para a área pontilhada na ordem correta: <br>
+        <span style="font-family: 'Open Sans', sans-serif; font-size: 0.8em; color: #333;">(Ordem numérica dos desafios anteriores: 2 6 5 4 3 9 7 8)</span>
     </p>
     
-    <p id="obs">  <!--Dica-->
-        Se a resposta do desafio 01 for: <br>
+    <p id="obs">  Se a resposta do desafio 01 for: <br>
         <b>Arranhei de leve a pintura da Mercedes ao dar ré na semana passada.</b> <br>
         E a do desafio 02 for: <br>
         <b>Meu coração bateu mais forte quando você me beijou.</b> <br>
@@ -282,48 +295,37 @@
         Não se esqueça do espaço entre as frases de cada desafio e da pontuação. <br>
         Boa sorte!
     </p>
+
     <div class="container">
         <div id="frases-embaralhadas"></div>
+        
         <button id="verificar-ordem">Verificar Ordem</button>
-        <div id="area-resposta"></div>
+        
+        <div id="area-resposta">
+            <p style="text-align: center; color: #888; pointer-events: none; margin-top: 50%;">Solte as frases aqui</p>
+        </div>
     </div>
+
     <p id="mensagem"></p>
     <p id="timer"></p>
     <div id="end"></div>
     
-    <button id="mostrarObs">Obs</button>
-
-    <div id="tempo-restante" style="position: fixed; bottom: 50px; left: 10px; font-size: 1.2em; color: #fff; background: rgba(255, 0, 179, 0); padding: 10px 15px; border-radius: 5px; font-family: Arial, sans-serif; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); z-index: 1000;">
-        Tempo Restante:
-    </div>
-    <div id="countdown"></div>
+    <button id="mostrarObs">?</button> <div id="countdown"></div>
     
     <script>
+        // Animação de entrada
         document.addEventListener("DOMContentLoaded", function() {
-            document.body.style.opacity = "0"; // Garante que começa invisível
+            document.body.style.opacity = "0";
             let opacidade = 0;
-    
             let fadeIn = setInterval(() => {
                 if (opacidade < 1) {
                     opacidade += 0.05;
-                    document.body.style.opacity = opacidade.toFixed(1); // Ajusta com 1 casa decimal
+                    document.body.style.opacity = opacidade.toFixed(1);
                 } else {
-                    clearInterval(fadeIn); // Para o loop quando atingir 1
+                    clearInterval(fadeIn);
                 }
-            }, 30); // Atualiza a cada 50ms
+            }, 30);
         });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const textarea = document.getElementById("resposta");
-        
-            function ajustarAltura() {
-                textarea.style.height = "auto"; // Redefine a altura
-                textarea.style.height = textarea.scrollHeight + "px"; // Ajusta para o conteúdo
-            }
-        
-            textarea.addEventListener("input", ajustarAltura);
-            ajustarAltura();
-        });        
 
         const frasesCorretas = [
             "Era dia 23 de maio quando o mundo parou e só existia você.",
@@ -337,9 +339,9 @@
         ];
 
         let frasesEmbaralhadas = [];
-        let elementoArrastado = null;
-        const tempoBloqueio = 1 * 60 * 1000; //1 minuto em milissegundos
+        const tempoBloqueio = 1 * 60 * 1000; // 1 minuto
         let ipUsuario;
+        let sortableList1, sortableList2; // Instâncias do SortableJS
 
         async function obterIP() {
             try {
@@ -353,16 +355,16 @@
         }
 
         async function verificarBloqueio() {
-            ipUsuario = await obterIP(); // Obtem o IP do usuário
+            ipUsuario = await obterIP();
             const bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
             const tempoAtual = Date.now();
 
             if (bloqueio[ipUsuario] && tempoAtual < bloqueio[ipUsuario]) {
-                iniciarContador(bloqueio[ipUsuario]); // Inicia o contador de bloqueio
-                return true; // Indica que o usuário está bloqueado
+                iniciarContador(bloqueio[ipUsuario]);
+                toggleDrag(false); // Desabilita drag
+                return true;
             }
-
-            return false; // Indica que o usuário não está bloqueado
+            return false;
         }
 
         function embaralharFrases() {
@@ -379,89 +381,67 @@
             frasesEmbaralhadas.forEach(fraseObj => {
                 const bloco = document.createElement("div");
                 bloco.classList.add("frase-bloco");
-                bloco.id = `frase-${fraseObj.id}`;
-                bloco.draggable = true;
+                // Removemos o ID numérico e draggable="true" pois o Sortable cuida disso
                 bloco.innerText = fraseObj.texto;
-
-                bloco.addEventListener("dragstart", iniciarArrasto);
-                bloco.addEventListener("dragend", finalizarArrasto);
-
                 containerEmbaralhadas.appendChild(bloco);
             });
         }
 
-        function iniciarArrasto(event) {
-            elementoArrastado = event.target;
-            event.dataTransfer.setData("text/plain", event.target.id);
-            event.target.style.opacity = "0.5"; // Reduz a opacidade para feedback visual
+        function iniciarSortable() {
+            const el1 = document.getElementById('frases-embaralhadas');
+            const el2 = document.getElementById('area-resposta');
+
+            // Configuração comum
+            const config = {
+                group: 'shared', // Permite mover itens entre as listas
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                delay: 100, // Previne arrasto acidental no toque (melhora rolagem)
+                delayOnTouchOnly: true,
+                onStart: function (evt) {
+                    // Remove o texto de ajuda se existir
+                    const placeholder = el2.querySelector('p');
+                    if(placeholder) placeholder.style.display = 'none';
+                }
+            };
+
+            sortableList1 = new Sortable(el1, config);
+            sortableList2 = new Sortable(el2, config);
         }
 
-        function finalizarArrasto(event) {
-            event.target.style.opacity = "1"; // Restaura a opacidade
-        }
-
-        function permitirDrop(event) {
-            event.preventDefault();
-            const areaResposta = document.getElementById("area-resposta");
-            areaResposta.style.borderColor = "#ff007f"; // Destaca a área de drop
-        }
-
-        function removerDrop(event) {
-            event.preventDefault();
-            const areaResposta = document.getElementById("area-resposta");
-            areaResposta.style.borderColor = "#aaa"; // Restaura a borda padrão
-        }
-
-        function receberDrop(event) {
-            event.preventDefault();
-            const id = event.dataTransfer.getData("text/plain");
-            const elemento = document.getElementById(id);
-            const areaResposta = document.getElementById("area-resposta");
-
-            if (event.target === areaResposta || event.target.parentElement === areaResposta) {
-                areaResposta.appendChild(elemento);
-            } else {
-                const containerEmbaralhadas = document.getElementById("frases-embaralhadas");
-                containerEmbaralhadas.appendChild(elemento);
-            }
-
-            elementoArrastado = null;
-            areaResposta.style.borderColor = "#aaa"; // Restaura a borda padrão
-        }
-
-        function habilitarReordenacao() {
-            const areaResposta = document.getElementById("area-resposta");
-            areaResposta.addEventListener("dragover", permitirDrop);
-            areaResposta.addEventListener("drop", receberDrop);
-            areaResposta.addEventListener("dragleave", removerDrop);
-
-            const containerEmbaralhadas = document.getElementById("frases-embaralhadas");
-            containerEmbaralhadas.addEventListener("dragover", permitirDrop);
-            containerEmbaralhadas.addEventListener("drop", receberDrop);
-            containerEmbaralhadas.addEventListener("dragleave", removerDrop);
+        function toggleDrag(enable) {
+            // Habilita ou desabilita o SortableJS
+            const estado = !enable; 
+            if(sortableList1) sortableList1.option("disabled", estado);
+            if(sortableList2) sortableList2.option("disabled", estado);
+            
+            const btn = document.getElementById("verificar-ordem");
+            if(btn) btn.disabled = !enable;
         }
 
         async function verificarOrdem() {
+            // Verificação de segurança extra
             if (await verificarBloqueio()) return;
 
             const areaResposta = document.getElementById("area-resposta");
-            const frasesSelecionadas = Array.from(areaResposta.children).map(bloco => bloco.innerText);
+            // Filtra apenas os divs (ignora o <p> de placeholder se ainda estiver lá)
+            const blocos = Array.from(areaResposta.children).filter(el => el.tagName === 'DIV');
+            const frasesSelecionadas = blocos.map(bloco => bloco.innerText);
 
+            // Verifica se todas as frases estão lá
             if (frasesSelecionadas.length !== frasesCorretas.length) {
-                document.getElementById("mensagem").style.display = "block";
-                document.getElementById("mensagem").innerText = "Ordene todas as frases!";
-                setTimeout(() => {
-                    document.getElementById("mensagem").style.display = "none";
-                }, 2000);
+                mostrarMensagem("Coloque todas as 8 frases na área pontilhada!", true);
                 return;
             }
 
             const respostaUsuario = frasesSelecionadas.join(" ");
             const respostaCorretaCompleta = frasesCorretas.join(" ");
 
-            if (respostaUsuario.toLowerCase() === respostaCorretaCompleta.toLowerCase()) {
-                document.getElementById("mensagem").style.display = "block";
-                document.getElementById("mensagem").innerText = "Resposta correta! Você será encaminhada para a próxima fase!";
+            // Normaliza para evitar erros com espaços invisíveis
+            if (respostaUsuario.trim() === respostaCorretaCompleta.trim()) {
+                mostrarMensagem("Resposta correta! Encaminhando...", false);
+                toggleDrag(false); // Trava para não mexer mais
                 window.location.href = "#end";
                 enviarEmail();
 
@@ -472,80 +452,63 @@
                     }, 500);
                 }, 3500);
             } else {
-                bloquearUsuario(); // Ativa o bloqueio imediatamente
-                document.getElementById("mensagem").style.display = "block";
-                document.getElementById("mensagem").innerText = "Resposta incorreta! Você não poderá responder por 1 minuto.";
-                setTimeout(function() {
-                    window.location.href = "#timer";
-                }, 10);
+                bloquearUsuario();
+                mostrarMensagem("Incorreto! Bloqueado por 1 minuto.", true);
+                setTimeout(function() { window.location.href = "#timer"; }, 10);
+            }
+        }
+
+        function mostrarMensagem(texto, erro) {
+            const msg = document.getElementById("mensagem");
+            msg.innerText = texto;
+            msg.style.display = "block";
+            msg.style.backgroundColor = erro ? "#ff4a6e" : "#4CAF50";
+            
+            if(erro) {
+                setTimeout(() => { msg.style.display = "none"; }, 3000);
             }
         }
 
         function bloquearUsuario() {
-            const desbloqueio = Date.now() + tempoBloqueio; // Calcula o tempo de desbloqueio
+            const desbloqueio = Date.now() + tempoBloqueio;
             let bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
-            bloqueio[ipUsuario] = desbloqueio; // Associa o IP ao tempo de desbloqueio
-            localStorage.setItem('bloqueiof10', JSON.stringify(bloqueio)); // Salva no localStorage
-            iniciarContador(desbloqueio); // Atualiza o contador
-
-            // Desabilita interações durante o bloqueio
-            const areaResposta = document.getElementById("area-resposta");
-            const frasesEmbaralhadasDiv = document.getElementById("frases-embaralhadas");
-            const verificarBotao = document.getElementById("verificar-ordem");
-
-            Array.from(areaResposta.children).forEach(bloco => {
-                bloco.draggable = false;
-                bloco.style.cursor = 'default';
-            });
-            Array.from(frasesEmbaralhadasDiv.children).forEach(bloco => {
-                bloco.draggable = false;
-                bloco.style.cursor = 'default';
-            });
-            verificarBotao.disabled = true;
+            bloqueio[ipUsuario] = desbloqueio;
+            localStorage.setItem('bloqueiof10', JSON.stringify(bloqueio));
+            
+            iniciarContador(desbloqueio);
+            toggleDrag(false);
         }
         
-        // Função para enviar o e-mail
         function enviarEmail() {
-            emailjs.send("personal_gmail", "template_Concluded") //alterar service e template pra cada necessidade
+            emailjs.send("personal_gmail", "template_Concluded") 
                 .then(function(response) {
-                    console.log("E-mail enviado com sucesso!", response.status, response.text);
+                    console.log("Sucesso!", response.status, response.text);
                 }, function(error) {
-                    console.error("Erro ao enviar o e-mail:", error);
+                    console.error("Erro no email:", error);
                 });
         }
 
         function iniciarContador(desbloqueio) {
             const timerElement = document.getElementById("timer");
-            const areaResposta = document.getElementById("area-resposta");
-            const frasesEmbaralhadasDiv = document.getElementById("frases-embaralhadas");
-            const verificarBotao = document.getElementById("verificar-ordem");
-
             timerElement.style.display = "block";
 
             function atualizarContador() {
                 const tempoRestante = desbloqueio - Date.now();
                 if (tempoRestante <= 0) {
-                    timerElement.innerText = "Você pode tentar novamente.";
-                    Array.from(areaResposta.children).forEach(bloco => {
-                        bloco.draggable = true;
-                        bloco.style.cursor = 'grab';
-                    });
-                    Array.from(frasesEmbaralhadasDiv.children).forEach(bloco => {
-                        bloco.draggable = true;
-                        bloco.style.cursor = 'grab';
-                    });
-                    verificarBotao.disabled = false;
+                    timerElement.innerText = "Pode tentar novamente.";
                     timerElement.style.display = "none";
                     document.getElementById("mensagem").style.display = "none";
 
-                    // Remove o bloqueio do localStorage
+                    // Libera
                     let bloqueio = JSON.parse(localStorage.getItem('bloqueiof10')) || {};
                     delete bloqueio[ipUsuario];
                     localStorage.setItem('bloqueiof10', JSON.stringify(bloqueio));
+                    
+                    toggleDrag(true); // Reativa o drag
                 } else {
                     const minutos = Math.floor(tempoRestante / 60000);
                     const segundos = Math.floor((tempoRestante % 60000) / 1000);
-                    timerElement.innerText = `Tente novamente em ${minutos}m ${segundos}s`;
+                    timerElement.innerText = `Aguarde: ${minutos}m ${segundos}s`;
                     setTimeout(atualizarContador, 1000);
                 }
             }
@@ -553,39 +516,45 @@
         }
 
         window.onload = function() {
-            verificarBloqueio().then(() => {
+            verificarBloqueio().then((isBlocked) => {
                 embaralharFrases();
                 criarBlocosFrases();
-                habilitarReordenacao();
+                iniciarSortable(); // Inicia a biblioteca
+
+                // Se não estiver bloqueado, garante que está habilitado
+                if(!isBlocked) toggleDrag(true); 
 
                 const verificarOrdemButton = document.getElementById("verificar-ordem");
                 verificarOrdemButton.addEventListener("click", verificarOrdem);
             });
         };
 
+        // Lógica do botão de Dica/Obs
         document.addEventListener("DOMContentLoaded", function () {
             const obs = document.getElementById("obs");
             const botao = document.getElementById("mostrarObs");
         
             botao.addEventListener("click", function () {
                 if (obs.style.opacity === "0" || obs.style.opacity === "") {
-                    obs.style.maxHeight = "500px"; // Ajuste conforme necessário
+                    obs.style.maxHeight = "500px";
                     obs.style.opacity = "1";
+                    botao.innerText = "X";
                 } else {
                     obs.style.maxHeight = "0";
                     obs.style.opacity = "0";
+                    botao.innerText = "?";
                 }
             });
         });
         
+        // Contagem regressiva (Footer)
         function atualizarContagemRegressiva() {
             const destino = new Date("2026-05-22T23:59:00");
             const agora = new Date();
             const diferenca = destino - agora;
 
             if (diferenca <= 0) {
-                document.getElementById("countdown").innerText = "Chegou o grande momento!";
-                clearInterval(intervaloContagem);
+                document.getElementById("countdown").innerText = "Chegou o dia!";
                 return;
             }
 
@@ -598,7 +567,7 @@
                 `${dias}d ${horas}h ${minutos}m ${segundos}s`;
         }
 
-        const intervaloContagem = setInterval(atualizarContagemRegressiva, 1000);
+        setInterval(atualizarContagemRegressiva, 1000);
         atualizarContagemRegressiva();
     </script>
 </body>
